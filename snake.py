@@ -7,19 +7,21 @@ Exercises
 3. How would you move the food?
 4. Change the snake to respond to mouse clicks.
 """
-
 from turtle import *
 from random import randrange, choice
 from freegames import square, vector
 
+# Lista de 5 colores diferentes (excluyendo el rojo)
+colores_disponibles = ['blue', 'green', 'purple', 'orange', 'yellow']
+
+# Seleccionar colores aleatorios para que la víbora y la comida sean diferentes entre sí
+color_vibora = choice(colores_disponibles)
+colores_restantes = [c for c in colores_disponibles if c != color_vibora]
+color_comida = choice(colores_restantes)
+
 food = vector(0, 0)
 snake = [vector(10, 0)]
 aim = vector(0, -10)
-
-# Colores al azar (5 opciones, sin rojo y diferentes entre sí)
-colores_disponibles = ['blue', 'green', 'yellow', 'purple', 'orange']
-color_vibora = choice(colores_disponibles)
-color_comida = choice([c for c in colores_disponibles if c != color_vibora])
 
 def change(x, y):
     "Change snake direction."
@@ -49,19 +51,13 @@ def move():
     else:
         snake.pop(0)
 
-    # Movimiento aleatorio de la comida sin salirse
-    step_options = [vector(10, 0), vector(-10, 0), vector(0, 10), vector(0, -10), vector(0, 0)]
-    chosen_step = choice(step_options)
-    potential_food = food.copy()
-    potential_food.move(chosen_step)
-    if inside(potential_food):
-        food.move(chosen_step)
-
     clear()
 
+    # Dibuja el cuerpo de la víbora con el color aleatorio asignado
     for body in snake:
         square(body.x, body.y, 9, color_vibora)
 
+    # Dibuja la comida con el color aleatorio diferente
     square(food.x, food.y, 9, color_comida)
     update()
     ontimer(move, 100)
